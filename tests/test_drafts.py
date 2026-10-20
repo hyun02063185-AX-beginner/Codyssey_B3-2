@@ -20,6 +20,8 @@ class DraftTests(unittest.TestCase):
         for value in (draft.replace("## Why", "## Reason"), draft.replace("- Add CLI", "Add CLI"), draft.replace("secure Git draft generation", "x" * 81)):
             with self.subTest(value=value), self.assertRaises(DraftError):
                 validate_pr(value)
+        with self.assertRaisesRegex(DraftError, "테스트 수행"):
+            validate_pr(draft.replace("- Add CLI", "- Tests passed after adding CLI"))
 
     def test_safe_context(self):
         changes = GitChanges("main", " M app.py", ("app.py",), "+email: test@example.com\n+api_key=123456789abcdef\n+Authorization: Bearer abcdef123", "", ())
@@ -33,6 +35,14 @@ class DraftTests(unittest.TestCase):
         changes = GitChanges("main", "?? .env", (".env",), "", "", (".env",))
         with self.assertRaises(SecurityError):
             prepare_context(changes)
+
+    def test_unclosed_private_key_block_and_known_token(self):
+        changes = GitChanges("main", " M code.py", ("code.py",), "+-----BEGIN PRIVATE KEY-----\n+partial", "", ())
+        with self.assertRaises(SecurityError):
+            prepare_context(changes)
+        token = "sk-" + "a" * 20
+        changes = GitChanges("main", " M code.py", ("code.py",), "+" + token, "", ())
+        self.assertNotIn(token, prepare_context(changes))
 
 
 if __name__ == "__main__":

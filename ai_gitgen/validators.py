@@ -7,6 +7,9 @@ class DraftError(Exception):
     """The model returned an unusable draft."""
 
 
+TEST_CLAIM = re.compile(r"(?i)(?:tests?\s+(?:passed|succeeded|were run)|테스트(?:가|는|를)?\s*(?:통과|완료|실행했|실행됨))")
+
+
 def validate_commit(raw: str) -> str:
     value = raw.strip()
     if value.startswith("```") or not value:
@@ -30,6 +33,8 @@ def validate_pr(raw: str) -> str:
     title, why, what, how = (part.strip() for part in match.groups())
     if len(title) > 80 or len(title) < 8:
         raise DraftError("PR 제목 길이가 잘못되었습니다.")
+    if TEST_CLAIM.search("\n".join((title, why, what))):
+        raise DraftError("PR 본문에 확인되지 않은 테스트 수행 주장이 있습니다.")
     for section in (why, what, how):
         if not any(re.match(r"^-\s+\S", line) for line in section.splitlines()):
             raise DraftError("각 PR 섹션에는 불릿이 필요합니다.")
