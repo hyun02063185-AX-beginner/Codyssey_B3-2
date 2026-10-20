@@ -26,7 +26,9 @@ macOS: `git diff`; `python3 -m unittest tests.test_cli -v`; 설정 완료 후 `p
 
 ## 실행 결과
 
-실제 확인: 모의 API 통합 테스트에서 변경이 있는 저장소의 `commit` 요청이 1회였고 `Describe email masking in Git drafts`가 검토 구획 안에 출력됐다. 이는 **모의 응답**이며 실제 AI의 품질 증거가 아니다. 실제 코디세이 출력 평가는 키·접속 규격 부족으로 미완료다. 기능 커밋 `17d27bf`.
+Codex 직접 검증: 모의 API 통합 테스트에서 변경이 있는 저장소의 `commit` 요청이 1회였고 `Describe email masking in Git drafts`가 검토 구획 안에 출력됐다. 이는 **모의 응답**이다. 기능 커밋 `17d27bf`.
+
+사용자 제공 실제 API 사례(2026-10-20): `python main.py commit` 성공, 요청 1회. 생성 제목은 `학습 문서에 실습 메모 추가: AI 생성 커밋 메시지 검토 필요`였다. 사용자는 본문이 `docs/learning/02-python-ai-api.md`의 실습 메모 추가를 정확히 설명했다고 확인했다. 본문 전문은 제공되지 않아 여기서 재구성하지 않는다.
 
 ## 오류 사례
 

@@ -26,7 +26,9 @@ macOS: `python3 -m unittest tests.test_drafts -v`; 설정 완료 후 `python3 ma
 
 ## 실행 결과
 
-실제 확인: 모의 API가 `All tests passed`라고 답한 통합 테스트에서 출력은 `- 실행 권장: python -m unittest discover -s tests`로 바뀌었다. 제목·섹션·불릿 검증 테스트 통과. 실제 공급자 PR 설명 품질은 아직 평가하지 못했다. 기능 커밋 `17d27bf`.
+Codex 직접 검증: 모의 API가 `All tests passed`라고 답한 통합 테스트에서 출력은 `- 실행 권장: python -m unittest discover -s tests`로 바뀌었다. 제목·섹션·불릿 검증 테스트 통과. 기능 커밋 `17d27bf`.
+
+사용자 제공 실제 API 사례(2026-10-20): `python main.py pr` 성공, 요청 1회. 제목은 `docs(learning): AI 생성 커밋 메시지 검토 안내 추가`였다. 사용자는 Why가 목적을 설명하고, What이 실제 수정 파일·문구와 맞으며, How to Test에 실행 권장 명령이 포함됐다고 확인했다. PR 본문 전문은 제공되지 않아 불릿을 새로 만들지 않는다.
 
 ## 오류 사례
 

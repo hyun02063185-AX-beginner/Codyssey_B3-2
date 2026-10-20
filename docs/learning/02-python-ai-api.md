@@ -20,15 +20,19 @@ API는 프로그램끼리 기능을 요청하는 약속이다. REST API는 보�
 
 [`ai_client.py`](../../ai_gitgen/ai_client.py)의 `AIClient.__init__()`은 HTTPS URL, 모델, 키, 파라미터 범위를 검사한다. `generate()`는 `urllib.request.Request`에 `model`과 `messages`를 JSON으로 넣는다. `request.urlopen()`이 실제 네트워크 요청을 보낸다. `request_count`는 요청 시도마다 1 증가한다. `choices[0].message.content`를 읽고 비어 있으면 오류로 처리한다. 인증 오류·네트워크 오류·잘못된 JSON을 `APIError`로 바꾼다. 자동 재시도는 없다. [`main.py`](../../main.py)는 설정을 환경변수와 CLI 옵션에서 읽는다.
 
-코디세이 Public API의 URL·모델·호환성은 확인되지 않았다. 따라서 이 코드는 [문서화된 Chat Completions 형식](https://platform.openai.com/docs/api-reference/chat/create)만 구현하고 기본 URL이나 모델을 추측하지 않는다.
+이 코드는 [문서화된 Chat Completions 형식](https://platform.openai.com/docs/api-reference/chat/create)을 구현한다. 사용자 제공 실행 결과에서는 코디세이 Public API의 `https://copa.codyssey.kr/v1/chat/completions`, 모델 `gpt-5-mini`, 환경변수 `CODYSSEY_API_KEY` 조합으로 `commit`과 `pr`이 성공했다. 이 결과는 해당 조합의 동작을 보여 주지만, `temperature`·`max_tokens`의 공급자 지원까지 증명하지는 않는다. 코드는 URL과 모델을 고정하지 않는다.
 
 ## 실행 실습
 
-키 없이 Windows: `python -m unittest tests.test_ai_client -v`; macOS: `python3 -m unittest tests.test_ai_client -v`. 확인된 공급자 설정을 받은 뒤에만 README의 환경변수를 설정하고 `python main.py commit`(macOS `python3`)을 실행한다.
+키 없이 Windows: `python -m unittest tests.test_ai_client -v`; macOS: `python3 -m unittest tests.test_ai_client -v`. 실제 사용 시 README의 환경변수를 설정하고 `python main.py commit`(macOS `python3`)을 실행한다. API 키는 문서나 명령 인수에 넣지 않는다.
+
+실습 메모: AI가 생성한 커밋 메시지는 사용자가 검토한 후 적용한다.
 
 ## 실행 결과
 
-실제 확인: 모의 HTTP 응답으로 요청 JSON, 선택 파라미터, 인증 실패, 네트워크 실패, 응답 누락을 검사했다. 실제 API 요청 0회. API 코드 커밋 `3a0fcc6`. 공급자 실제 연결은 아직 미검증이다.
+Codex 직접 검증: 모의 HTTP 응답으로 요청 JSON, 선택 파라미터, 인증 실패, 네트워크 실패, 응답 누락을 검사했다. API 코드 커밋 `3a0fcc6`.
+
+사용자 제공 실제 실행 결과(2026-10-20, Windows PowerShell): 위 URL·모델·환경변수로 `commit` 1회와 `pr` 1회 성공, 실제 API 요청 합계 2회. Codex는 비용이 드는 호출을 다시 실행하지 않았다. 원본 터미널 전문은 제공되지 않았으며, 결과 요약을 기록했다.
 
 ## 오류 사례
 
